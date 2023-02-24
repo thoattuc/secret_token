@@ -5,7 +5,7 @@ class HomeController {
     }
 
     homePage(req: Request, res: Response, next: NextFunction) {
-        res.render('home');
+        res.render('home', {title: 'Home'});
     }
 
     loginPage(req: Request, res: Response, next: NextFunction) {
