@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title><%= title %></title>
+    <%- include("layouts/head.ejs") -%>
+</head>
+<body>
+<div class="container card">
+    <h2 class="text-center">Register</h2>
+    <form id="form-auth" action="/api/register" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" aria-describedby="" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="">
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="handleSubmit(event)">Submit</button>
+    </form>
+</div>
+    <%- include("layouts/script.ejs") -%>
+    <script>
+        let form = document.querySelector('#form-auth');
+        let username = form.querySelector('#username');
+        let password = form.querySelector('#password');
+        console.log(form.action, form.method);
+        function handleSubmit(event) {
+            event.preventDefault(); //Khong load lai trang
+            axios({
+                method: form.method,
+                url: form.action,
+                data: {
+                    username: username.value,
+                    password: password.value
+                }
+            }).then((result) => {
+                if(result.data.message) {
+                    console.log(">>>hostname&port",window.location.hostname, window.location.port);
+                    window.location.replace(
+                        `http://${window.location.hostname}:${window.location.port}/auth/login`
+                    );
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+</html>
