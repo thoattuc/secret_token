@@ -7,14 +7,15 @@ import dotenv from "dotenv";
 
 dotenv.config({})
 
-class UserController {
+export class UserController {
     private userRepository: any;
+
     constructor() {
         this.userRepository = AppDataSource.getRepository(User);
     }
 
     register = async (req: Request, res: Response, next: NextFunction) => {
-        console.log(">>>axios register",req.body);
+        console.log(">>>axios register", req.body);
         try {
             const {username, password} = req.body;
             const salt = await bcrypt.genSalt(10);
@@ -30,15 +31,15 @@ class UserController {
     };
 
     login = async (req: Request, res: Response, next: NextFunction) => {
-        console.log(">>>axios login",req.body);
+        console.log(">>>axios login", req.body);
         try {
             const {username, password} = req.body; //lấy dữ lệu từ form login
             const user = await this.userRepository.findOneBy({username}); //kiểm tra trong csdl
             console.log(user);
-            if(user) {
+            if (user) {
                 bcrypt.compare(password, user.password, (err, same) => {
-                    console.log(">>>check password same:",same);
-                    if(same) {
+                    console.log(">>>check password same:", same);
+                    if (same) {
                         //---tạo token jwt---//
                         let token = jwt.sign({
                             iss: user.username,
@@ -46,7 +47,7 @@ class UserController {
                             iat: new Date().getTime(),
                         }, process.env.USER_CODE_SECRET);
                         res.cookie("authorization", "Bearer" + token, {signed: true});
-                        res.status(200).json({message: "Login success",token, user: user});
+                        res.status(200).json({message: "Login success", token, user: user});
                     } else {
                         res.status(400).json({message: "Login failed - incorrect password"});
                     }
@@ -60,4 +61,4 @@ class UserController {
     }
 }
 
-export default new UserController();
+export default new UserController;

@@ -10,11 +10,11 @@ export class User {
     public readonly id: number;
 
     @Column({type: 'varchar'})
-    public username : string
+    public username: string;
 
     @Column({type: 'varchar'})
-    public password : string
+    public password: string;
 
     @Column({type: 'int'})
-    public role : number
+    public role: number;
 }
